@@ -1,0 +1,3 @@
+/vendor/
+.idea
+/src/tests/config.php

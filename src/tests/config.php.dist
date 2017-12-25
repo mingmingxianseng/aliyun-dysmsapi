@@ -1,0 +1,16 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: webid
+ * Date: 17-12-25
+ * Time: 下午6:21
+ */
+return [
+    'access_key_id'     => 'xxxxxx',
+    'access_key_secret' => 'xxxxxxxxx',
+    'domain'            => 'dysmsapi.aliyuncs.com',
+    'secret'            => false,
+    'sign_name'         => 'xxxx',
+    'phone'             => 13912345678,
+    'template_code'     => 'SMS_0000001',
+];

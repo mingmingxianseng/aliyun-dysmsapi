@@ -1,0 +1,25 @@
+{
+    "name": "mmxs/aliyun-dysmsapi",
+    "description": "阿里云sms",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "chenmingming",
+            "email": "chenmingming@axhome.com.cn"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "mmxs\\": "src"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "psr/log": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
+    }
+}
