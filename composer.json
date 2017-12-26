@@ -3,7 +3,7 @@
     "description": "阿里云sms",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "authors": [
         {
             "name": "chenmingming",

@@ -56,7 +56,8 @@ class Sms
      * @param string $templateCode   短信模板编码
      * @param array  $templateParams 短信模板变量数组
      *
-     * @return bool
+     * @return array
+     * @throws DysmsException
      */
     public function send($phone, $templateCode, $templateParams = [])
     {
@@ -79,24 +80,25 @@ class Sms
             $json     = $response->getBody()->getContents();
             $this->logger->debug('request success', ['response' => $json]);
             $data = json_decode($json, true);
-            if ($data['Code'] === 'OK') {
-                $this->logger->debug('result success');
-
-                return true;
-            } else {
+            if (!isset($data['Code'])) {
                 $this->logger->error('result failed', ['response' => $json]);
-
-                return false;
+                throw new DysmsException("请求数据异常:" . $json);
+            }
+            if ($data['Code'] != 'OK') {
+                $this->logger->error('result failed', ['response' => $json]);
+                $errMsg = sprintf("[%s] %s", $data['Code'], $data['Message']);
+                throw new DysmsException($errMsg);
             }
 
+            return $data;
         } catch (ClientException $e) {
             $this->logger->error($e, ['response' => $e->getResponse()->getBody()->getContents()]);
-
-            return false;
+            throw new DysmsException($e->getMessage(), $e->getCode(), $e);
+        } catch (DysmsException $e) {
+            throw $e;
         } catch (\Exception $e) {
-            $this->logger->error($e, ['params' => $this->params, 'options' => $this->options]);
-
-            return false;
+            $this->logger->error($e);
+            throw new DysmsException($e->getMessage());
         }
     }
 
