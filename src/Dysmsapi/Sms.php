@@ -34,7 +34,7 @@ class Sms
     /** @var  LoggerInterface $logger */
     private $logger;
 
-    public function __construct(array $options, LoggerInterface $logger = null)
+    public function __construct(array $options, LoggerInterface $logger)
     {
         $this->options = array_replace($this->options, $options);
         $this->setParam('AccessKeyId', $this->options['access_key_id'])
@@ -44,7 +44,7 @@ class Sms
             ->setParam('Version', $this->options['version']);
         $this->client = new Client(['verify' => $this->options['secret'] == true]);
         $this->logger = $logger;
-        $this->logger && $this->logger->info('dysmsapi options', ['options' => $this->options]);
+        $this->logger->info('dysmsapi options', ['options' => $this->options]);
     }
 
     /**
@@ -73,33 +73,28 @@ class Sms
             . "://{$this->options['domain']}/?Signature="
             . $signature . $sortedQueryStringTmp;
 
-        $this->logger && $this->logger->debug('dysmsapi sendSms', ['params' => $this->params]);
+        $this->logger->debug('dysmsapi sendSms', ['params' => $this->params]);
         try {
             $response = $this->client->get($url);
             $json     = $response->getBody()->getContents();
-            $this->logger
-            && $this->logger->debug('request success', ['response' => $json]);
+            $this->logger->debug('request success', ['response' => $json]);
             $data = json_decode($json, true);
             if ($data['Code'] === 'OK') {
-                $this->logger
-                && $this->logger->debug('result success');
+                $this->logger->debug('result success');
 
                 return true;
             } else {
-                $this->logger
-                && $this->logger->error('result failed', ['response' => $json]);
+                $this->logger->error('result failed', ['response' => $json]);
 
                 return false;
             }
 
         } catch (ClientException $e) {
-            $this->logger
-            && $this->logger->error($e, ['response' => $e->getResponse()->getBody()->getContents()]);
+            $this->logger->error($e, ['response' => $e->getResponse()->getBody()->getContents()]);
 
             return false;
         } catch (\Exception $e) {
-            $this->logger
-            && $this->logger->error($e, ['params' => $this->params, 'options' => $this->options]);
+            $this->logger->error($e, ['params' => $this->params, 'options' => $this->options]);
 
             return false;
         }
